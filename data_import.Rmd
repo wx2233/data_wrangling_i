@@ -8,7 +8,8 @@ output: github_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
-library(tidyverse)
+library(tidyverse) ##include readr
+library(readxl)
 ```
 
 
@@ -49,11 +50,10 @@ pups_data = janitor::clean_names(pups_data)
 # view(pups_data)
 ```
 
-
-```{r}
 ##Skip the first 50 lines of data and not assume the first row are variable names
-#litters_data = read_csv(file = "./data/FAS_litters.csv", skip = 10, col_names = FALSE) 
-#head(litters_data)
+```{r}
+litters_data = read_csv(file = "./data/FAS_litters.csv", skip = 10, col_names = FALSE)
+head(litters_data)
 ```
 
 
@@ -74,8 +74,67 @@ litters_data = read_csv(file = "./data/FAS_litters.csv",
 ```
 
 ## Parsing column for pups data
-```{r}
+```{r learning assessment 2}
 pups_data = read_csv("./data/FAS_pups.csv", col_types = "ciiiii")
 skimr::skim(pups_data)
 ```
+
+
+## Read in an excel file
+
+```{r}
+mlb11_data = 
+  read_excel(
+    path = "./data/mlb11.xlsx",
+    range = "A1:D7"
+    )
+mlb11_data = read_excel( path = "./data/mlb11.xlsx")
+
+
+```
+
+
+
+## Read in a SAS file
+
+```{r}
+pulse_data = haven::read_sas("./data/public_pulse_data.sas7bdat")
+```
+
+
+```{r}
+pups_base = read.csv("./data/FAS_pups.csv")   
+pups_readr = read_csv("./data/FAS_pups.csv")
+
+#View(pups_base)  
+str(pups_base)   ### dataframe 
+names(pups_base)
+
+#View(pups_readr)
+str(pups_readr)  ### tibble
+names(pups_readr)
+ 
+pups_base
+pups_readr
+
+pups_base$S  # = Sex
+#pups_readr$S
+pups_readr$Sex
+
+#pull(pups_base,S)
+pull(pups_readr,Sex)
+```
+
+
+
+
+
+```{r}
+write_csv(litters_data,
+          path = "./data/FAS_litters111.csv")
+```
+
+
+
+
 
