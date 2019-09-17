@@ -10,3 +10,72 @@ knitr::opts_chunk$set(echo = TRUE)
 
 library(tidyverse)
 ```
+
+
+## Load in the litters dataset
+
+```{r}
+## read in a dataset
+
+## absolute path (use getwd())
+#"/Users/osukuma/Downloads/DS/Data_Import/data_wrangling_i/data/FAS_litters.csv"
+## relative path
+#"./data//FAS_litters.csv""
+
+litters_data = read_csv(file = "./data/FAS_litters.csv") ## don't use read.csv
+## view(data)
+# view(litters_data)  only use it in the console
+names(litters_data)
+## clean up the names
+litters_data = janitor::clean_names(litters_data)  #janitor is the package. We only use one function of this package. Sometimes there are name conflicts .
+names(litters_data)
+
+
+## Check the data in console
+#view/View/str/head/tail
+#tail(litters_data, 5)
+#skimr::skim(litters_data) Skim summary statistics
+```
+
+
+## Load in the pups data
+
+```{r learning assessment 1}
+## absolute path
+pups_data = read_csv(file = "~/Downloads/DS/Data_Import/data_wrangling_i/data/FAS_pups.csv")
+## relative path
+pups_data = read_csv(file = "./data/FAS_pups.csv")
+pups_data = janitor::clean_names(pups_data)
+# view(pups_data)
+```
+
+
+```{r}
+##Skip the first 50 lines of data and not assume the first row are variable names
+#litters_data = read_csv(file = "./data/FAS_litters.csv", skip = 10, col_names = FALSE) 
+#head(litters_data)
+```
+
+
+## Parsing column for litters_data
+```{r}
+litters_data = read_csv(file = "./data/FAS_litters.csv",
+  col_types = cols(
+    Group = col_character(), 
+    `Litter Number` = col_character(),
+    `GD0 weight` = col_double(),
+    `GD18 weight` = col_double(),
+    `GD of Birth` = col_integer(),
+    `Pups born alive` = col_integer(),
+    `Pups dead @ birth` = col_integer(),
+    `Pups survive` = col_integer()   #have space 
+  )
+)
+```
+
+## Parsing column for pups data
+```{r}
+pups_data = read_csv("./data/FAS_pups.csv", col_types = "ciiiii")
+skimr::skim(pups_data)
+```
+
