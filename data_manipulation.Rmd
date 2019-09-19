@@ -102,14 +102,19 @@ filter(pups_data, pd_walk < 11, sex == 2)
 
 ## Mutate
 ```{r}
-
-
 mutate(
   litters_data,
   wt_gain = gd18_weight -  gd0_weight,
   group = str_to_lower(group))
 ```
 
+
+## Learning Assessment 3
+
+```{r}
+mutate(pups_data, pivot_minus7 = pd_pivot - 7)
+mutate(pups_data, pd_sum = pd_ears + pd_eyes + pd_pivot + pd_walk)
+```
 
 ## Arrange 
 
@@ -122,5 +127,60 @@ arrange(litters_data,pups_born_alive, gd0_weight)
 ```
 
 
+
+## use %>% 
+```{r}
+litters_data = 
+  read_csv("./data/FAS_litters.csv",col_types = "ccddiiii") %>%
+  janitor::clean_names() %>% 
+  select(-pups_survive) %>% 
+  mutate(
+    wt_gain = gd18_weight - gd0_weight,
+    group = str_to_lower(group)) %>% 
+  drop_na(gd0_weight) ## know the data 
+
+
+litters_data = 
+  read_csv("./data/FAS_litters.csv",col_types = "ccddiiii") %>%
+  janitor::clean_names() %>% 
+  select(-pups_survive) %>% 
+  mutate(
+    wt_gain = gd18_weight - gd0_weight,
+    group = str_to_lower(group)) %>% 
+  drop_na(gd0_weight) ## know the data 
+
+litters_data %>%
+  lm(wt_gain ~ pups_born_alive, data = .) %>%
+  broom::tidy()
+```      
+
+
+```{r}
+litters_data %>% view()
+litters_data %>% pull(gd0_weight) %>% mean
+```
+
+
+
+
+Learning Assessment: Write a chain of commands that:
+
+loads the pups data
+cleans the variable names
+filters the data to include only pups with sex 1
+removes the PD ears variable
+creates a variable that indicates whether PD pivot is 7 or more days
+
+## Learning Assessment 4
+
+```{r}
+pups_data =
+  read_csv("./data/FAS_pups.csv",  col_types = "ciiiii") %>% 
+  janitor::clean_names() %>% 
+  filter(sex == 1) %>% 
+  select( -pd_ears) %>% 
+  mutate(var_pdv_7 = pd_pivot > 7)
+  
+```
 
 

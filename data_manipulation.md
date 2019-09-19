@@ -350,6 +350,32 @@ mutate(
     ## # … with 46 more rows, and 3 more variables: pups_dead_birth <int>,
     ## #   pups_survive <int>, wt_gain <dbl>
 
+## Learning Assessment 3
+
+``` r
+mutate(pups_data, pivot_minus7 = pd_pivot - 7)
+```
+
+    ## # A tibble: 313 x 7
+    ##   litter_number   sex pd_ears pd_eyes pd_pivot pd_walk pivot_minus7
+    ##   <chr>         <int>   <int>   <int>    <int>   <int>        <dbl>
+    ## 1 #85               1       4      13        7      11            0
+    ## 2 #85               1       4      13        7      12            0
+    ## 3 #1/2/95/2         1       5      13        7       9            0
+    ## # … with 310 more rows
+
+``` r
+mutate(pups_data, pd_sum = pd_ears + pd_eyes + pd_pivot + pd_walk)
+```
+
+    ## # A tibble: 313 x 7
+    ##   litter_number   sex pd_ears pd_eyes pd_pivot pd_walk pd_sum
+    ##   <chr>         <int>   <int>   <int>    <int>   <int>  <int>
+    ## 1 #85               1       4      13        7      11     35
+    ## 2 #85               1       4      13        7      12     36
+    ## 3 #1/2/95/2         1       5      13        7       9     34
+    ## # … with 310 more rows
+
 ## Arrange
 
 ``` r
@@ -390,3 +416,60 @@ arrange(litters_data,pups_born_alive, gd0_weight)
     ## 3 Low8  #4/84               21.8        35.2          20               4
     ## # … with 46 more rows, and 2 more variables: pups_dead_birth <int>,
     ## #   pups_survive <int>
+
+## use %\>%
+
+``` r
+litters_data = 
+  read_csv("./data/FAS_litters.csv",col_types = "ccddiiii") %>%
+  janitor::clean_names() %>% 
+  select(-pups_survive) %>% 
+  mutate(
+    wt_gain = gd18_weight - gd0_weight,
+    group = str_to_lower(group)) %>% 
+  drop_na(gd0_weight) ## know the data 
+
+
+litters_data = 
+  read_csv("./data/FAS_litters.csv",col_types = "ccddiiii") %>%
+  janitor::clean_names() %>% 
+  select(-pups_survive) %>% 
+  mutate(
+    wt_gain = gd18_weight - gd0_weight,
+    group = str_to_lower(group)) %>% 
+  drop_na(gd0_weight) ## know the data 
+
+litters_data %>%
+  lm(wt_gain ~ pups_born_alive, data = .) %>%
+  broom::tidy()
+```
+
+    ## # A tibble: 2 x 5
+    ##   term            estimate std.error statistic  p.value
+    ##   <chr>              <dbl>     <dbl>     <dbl>    <dbl>
+    ## 1 (Intercept)       13.1       1.27      10.3  3.39e-11
+    ## 2 pups_born_alive    0.605     0.173      3.49 1.55e- 3
+
+``` r
+litters_data %>% view()
+litters_data %>% pull(gd0_weight) %>% mean
+```
+
+    ## [1] 24.37941
+
+Learning Assessment: Write a chain of commands that:
+
+loads the pups data cleans the variable names filters the data to
+include only pups with sex 1 removes the PD ears variable creates a
+variable that indicates whether PD pivot is 7 or more days
+
+## Learning Assessment 4
+
+``` r
+pups_data =
+  read_csv("./data/FAS_pups.csv",  col_types = "ciiiii") %>% 
+  janitor::clean_names() %>% 
+  filter(sex == 1) %>% 
+  select( -pd_ears) %>% 
+  mutate(var_pdv_7 = pd_pivot > 7)
+```
