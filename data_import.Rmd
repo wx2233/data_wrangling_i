@@ -118,8 +118,12 @@ pups_base
 pups_readr
 
 pups_base$S  # = Sex
+class(pull(pups_base,S))
+class(pups_base$S)
+
 #pups_readr$S
 pups_readr$Sex
+class(pups_readr$Sex)
 
 #pull(pups_base,S)
 pull(pups_readr,Sex)
