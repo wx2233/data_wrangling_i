@@ -90,6 +90,37 @@ drop_na(litters_data, gd0_weight)  ##remove rows
 
 ```
 
+## Learning Assessment 2
+
+```{r}
+filter(pups_data,sex == 1)
+filter(pups_data, pd_walk < 11, sex == 2)
+```
+
+
+
+
+## Mutate
+```{r}
+
+
+mutate(
+  litters_data,
+  wt_gain = gd18_weight -  gd0_weight,
+  group = str_to_lower(group))
+```
+
+
+## Arrange 
+
+```{r}
+arrange(litters_data,pups_born_alive)
+
+arrange(litters_data, desc(pups_born_alive))   ## descending
+arrange(litters_data,pups_born_alive, gd0_weight)
+
+```
+
 
 
 

@@ -305,3 +305,88 @@ drop_na(litters_data, gd0_weight)  ##remove rows
     ## 3 Con7  #5/5/3/83/3-3       26          41.4          19               6
     ## # … with 31 more rows, and 2 more variables: pups_dead_birth <int>,
     ## #   pups_survive <int>
+
+## Learning Assessment 2
+
+``` r
+filter(pups_data,sex == 1)
+```
+
+    ## # A tibble: 155 x 6
+    ##   litter_number   sex pd_ears pd_eyes pd_pivot pd_walk
+    ##   <chr>         <int>   <int>   <int>    <int>   <int>
+    ## 1 #85               1       4      13        7      11
+    ## 2 #85               1       4      13        7      12
+    ## 3 #1/2/95/2         1       5      13        7       9
+    ## # … with 152 more rows
+
+``` r
+filter(pups_data, pd_walk < 11, sex == 2)
+```
+
+    ## # A tibble: 127 x 6
+    ##   litter_number   sex pd_ears pd_eyes pd_pivot pd_walk
+    ##   <chr>         <int>   <int>   <int>    <int>   <int>
+    ## 1 #1/2/95/2         2       4      13        7       9
+    ## 2 #1/2/95/2         2       4      13        7      10
+    ## 3 #1/2/95/2         2       5      13        8      10
+    ## # … with 124 more rows
+
+## Mutate
+
+``` r
+mutate(
+  litters_data,
+  wt_gain = gd18_weight -  gd0_weight,
+  group = str_to_lower(group))
+```
+
+    ## # A tibble: 49 x 9
+    ##   group litter_number gd0_weight gd18_weight gd_of_birth pups_born_alive
+    ##   <chr> <chr>              <dbl>       <dbl>       <int>           <int>
+    ## 1 con7  #85                 19.7        34.7          20               3
+    ## 2 con7  #1/2/95/2           27          42            19               8
+    ## 3 con7  #5/5/3/83/3-3       26          41.4          19               6
+    ## # … with 46 more rows, and 3 more variables: pups_dead_birth <int>,
+    ## #   pups_survive <int>, wt_gain <dbl>
+
+## Arrange
+
+``` r
+arrange(litters_data,pups_born_alive)
+```
+
+    ## # A tibble: 49 x 8
+    ##   group litter_number gd0_weight gd18_weight gd_of_birth pups_born_alive
+    ##   <chr> <chr>              <dbl>       <dbl>       <int>           <int>
+    ## 1 Con7  #85                 19.7        34.7          20               3
+    ## 2 Low7  #111                25.5        44.6          20               3
+    ## 3 Low8  #4/84               21.8        35.2          20               4
+    ## # … with 46 more rows, and 2 more variables: pups_dead_birth <int>,
+    ## #   pups_survive <int>
+
+``` r
+arrange(litters_data, desc(pups_born_alive))   ## descending
+```
+
+    ## # A tibble: 49 x 8
+    ##   group litter_number gd0_weight gd18_weight gd_of_birth pups_born_alive
+    ##   <chr> <chr>              <dbl>       <dbl>       <int>           <int>
+    ## 1 Low7  #102                22.6        43.3          20              11
+    ## 2 Mod8  #5/93               NA          41.1          20              11
+    ## 3 Con7  #1/5/3/83/3-…       NA          NA            20               9
+    ## # … with 46 more rows, and 2 more variables: pups_dead_birth <int>,
+    ## #   pups_survive <int>
+
+``` r
+arrange(litters_data,pups_born_alive, gd0_weight)
+```
+
+    ## # A tibble: 49 x 8
+    ##   group litter_number gd0_weight gd18_weight gd_of_birth pups_born_alive
+    ##   <chr> <chr>              <dbl>       <dbl>       <int>           <int>
+    ## 1 Con7  #85                 19.7        34.7          20               3
+    ## 2 Low7  #111                25.5        44.6          20               3
+    ## 3 Low8  #4/84               21.8        35.2          20               4
+    ## # … with 46 more rows, and 2 more variables: pups_dead_birth <int>,
+    ## #   pups_survive <int>
