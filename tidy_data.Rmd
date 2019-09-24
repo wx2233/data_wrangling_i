@@ -1,0 +1,54 @@
+---
+title: "data tidying"
+author: "Weijia Xiong"
+date: "9/24/2019"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+options(tibble.print_min = 5)
+```
+
+
+
+## Wide to long
+```{r}
+pulse_data = haven::read_sas("./data/public_pulse_data.sas7bdat") %>%
+  janitor::clean_names()
+
+pulse_tidy_data = 
+  pivot_longer(
+    pulse_data, 
+    bdi_score_bl:bdi_score_12m,
+    names_to = "visit", 
+    names_prefix = "bdi_score_",
+    values_to = "bdi") %>% 
+  mutate(
+    visit = recode(visit, "00m" = "bl")  #recode/replace ... bl 00m - bl
+  )
+
+```
+
+
+
+```{r}
+## converting visit to a factor variable
+pulse_data = 
+  haven::read_sas("./data/public_pulse_data.sas7bdat") %>%
+  janitor::clean_names() %>%
+  pivot_longer(
+    bdi_score_bl:bdi_score_12m,
+    names_to = "visit", 
+    names_prefix = "bdi_score_",# remove matching text from the start of each variable name.
+    values_to = "bdi") %>%
+  select(id, visit, everything()) %>% ## move id and visit to the front
+  mutate(
+    visit = replace(visit, visit == "bl", "00m"),
+    visit = factor(visit, levels = str_c(c("00", "01", "06", "12"), "m"))) %>%
+  arrange(id, visit)
+
+print(pulse_data, n = 12)
+```
+
